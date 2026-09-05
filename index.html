@@ -11,45 +11,48 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
             background-color: #0a0a0a;
+            color: #fff;
+            font-family: system-ui, -apple-system, sans-serif;
         }
 
-        #app-frame {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        a {
+            color: #4A90E2;
         }
     </style>
 </head>
 
 <body>
     <!--
-    The src here is a placeholder. The script below fills it in with the
-    current page's own query string (e.g. ?id=abc123) so a guest's link
-    still works no matter which Web App this page is pointed at.
+    Google has gotten increasingly strict about letting Apps Script Web Apps be framed
+    inside a third-party page (the sandboxed content layer can send X-Frame-Options
+    regardless of what the script itself sets), so this page navigates the whole tab
+    instead of embedding an iframe. That trades the branded URL staying in the address
+    bar for something that reliably works.
   -->
-    <iframe id="app-frame" src="" allow="camera; microphone; fullscreen; autoplay" allowfullscreen>
-    </iframe>
+    <div class="loading" id="fallback">
+        <p>Redirecting… if nothing happens, <a id="fallback-link" href="#">click here</a>.</p>
+    </div>
 
     <script>
         // The RSVP APP Web App's deployed /exec URL. It routes internally by the
         // ?page= param (default = RSVP confirm, &page=gallery = the photo gallery),
-        // so this one iframe target covers both stages of the guest link's life.
+        // so this one URL covers both stages of the guest link's life.
         const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby19nKECzSg4JhhDJY80zL4FuDGJy9rmNDKdVToHe8Uuy58emQngQs3eth5Zfv58BgO/exec";
 
-        const queryString = window.location.search;
-        const frame = document.getElementById('app-frame');
+        const target = APP_SCRIPT_URL + window.location.search;
 
-        if (queryString) {
-            const separator = APP_SCRIPT_URL.includes('?') ? '&' : '?';
-            frame.src = APP_SCRIPT_URL + queryString;
-        } else {
-            frame.src = APP_SCRIPT_URL;
-        }
-
-        console.log("Loading App from:", frame.src);
+        document.getElementById('fallback-link').href = target;
+        window.location.replace(target);
     </script>
 </body>
 
