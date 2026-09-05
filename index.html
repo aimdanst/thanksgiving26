@@ -39,27 +39,18 @@
     instead of embedding an iframe. That trades the branded URL staying in the address
     bar for something that reliably works.
 
-    Two different destinations share this one short URL:
-      - no ?id= yet          -> the Google Form guests fill out to RSVP
-      - ?id=<guestId> (from  -> the Apps Script Web App (RSVP confirm / gallery,
-        the confirmation         routed internally by &page=)
-        email's link)
+    The app itself now routes everything (RSVP form / confirm / gallery) off one URL,
+    so this page just forwards whatever query string it was given.
   -->
     <div class="loading" id="fallback">
         <p>Redirecting… if nothing happens, <a id="fallback-link" href="#">click here</a>.</p>
     </div>
 
     <script>
-        // Fill in once you've run createRsvpForm() in the Apps Script editor and have
-        // its logged "Public URL" — this is the actual RSVP intake form.
-        const RSVP_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScapbsgm6gFpPkHvLp1ab4L5tQ-EcOJg7PG0UXjy57JJA2JNw/viewform";
-
-        // The RSVP APP Web App's deployed /exec URL — handles everything once a guest
-        // ID exists (routes internally by &page=: confirm by default, gallery if set).
+        // The RSVP APP Web App's deployed /exec URL.
         const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby19nKECzSg4JhhDJY80zL4FuDGJy9rmNDKdVToHe8Uuy58emQngQs3eth5Zfv58BgO/exec";
 
-        const hasGuestId = new URLSearchParams(window.location.search).has('id');
-        const target = hasGuestId ? APP_SCRIPT_URL + window.location.search : RSVP_FORM_URL;
+        const target = APP_SCRIPT_URL + window.location.search;
 
         document.getElementById('fallback-link').href = target;
         window.location.replace(target);
