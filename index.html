@@ -11,49 +11,27 @@
             padding: 0;
             width: 100%;
             height: 100%;
+            overflow: hidden;
             background-color: #0a0a0a;
-            color: #fff;
-            font-family: system-ui, -apple-system, sans-serif;
         }
 
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            text-align: center;
-            padding: 0 20px;
-        }
-
-        a {
-            color: #4A90E2;
+        #app-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
         }
     </style>
 </head>
 
 <body>
-    <!--
-    Google has gotten increasingly strict about letting Apps Script Web Apps be framed
-    inside a third-party page (the sandboxed content layer can send X-Frame-Options
-    regardless of what the script itself sets), so this page navigates the whole tab
-    instead of embedding an iframe. That trades the branded URL staying in the address
-    bar for something that reliably works.
-
-    The app itself now routes everything (RSVP form / confirm / gallery) off one URL,
-    so this page just forwards whatever query string it was given.
-  -->
-    <div class="loading" id="fallback">
-        <p>Redirecting… if nothing happens, <a id="fallback-link" href="#">click here</a>.</p>
-    </div>
+    <iframe id="app-frame" src="" allow="camera; microphone; fullscreen; autoplay" allowfullscreen>
+    </iframe>
 
     <script>
-        // The RSVP APP Web App's deployed /exec URL.
         const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby19nKECzSg4JhhDJY80zL4FuDGJy9rmNDKdVToHe8Uuy58emQngQs3eth5Zfv58BgO/exec";
-
-        const target = APP_SCRIPT_URL + window.location.search;
-
-        document.getElementById('fallback-link').href = target;
-        window.location.replace(target);
+        const frame = document.getElementById('app-frame');
+        frame.src = APP_SCRIPT_URL + window.location.search;
     </script>
 </body>
 
