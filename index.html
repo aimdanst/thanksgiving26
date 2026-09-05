@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Solid Tiger Thanksgiving Party 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0a0a0a;
+        }
+
+        #app-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <!--
+    The src here is a placeholder. The script below fills it in with the
+    current page's own query string (e.g. ?id=abc123) so a guest's link
+    still works no matter which Web App this page is pointed at.
+  -->
+    <iframe id="app-frame" src="" allow="camera; microphone; fullscreen; autoplay" allowfullscreen>
+    </iframe>
+
+    <script>
+        // The RSVP APP Web App's deployed /exec URL. It routes internally by the
+        // ?page= param (default = RSVP confirm, &page=gallery = the photo gallery),
+        // so this one iframe target covers both stages of the guest link's life.
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby19nKECzSg4JhhDJY80zL4FuDGJy9rmNDKdVToHe8Uuy58emQngQs3eth5Zfv58BgO/exec";
+
+        const queryString = window.location.search;
+        const frame = document.getElementById('app-frame');
+
+        if (queryString) {
+            const separator = APP_SCRIPT_URL.includes('?') ? '&' : '?';
+            frame.src = APP_SCRIPT_URL + queryString;
+        } else {
+            frame.src = APP_SCRIPT_URL;
+        }
+
+        console.log("Loading App from:", frame.src);
+    </script>
+</body>
+
+</html>
